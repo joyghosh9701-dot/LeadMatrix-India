@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LeadMatrix India | Official Portal</title>
+<link rel="icon" href="https://i.ibb.co/5WnLCMDC/Picsart-26-02-18-13-56-38-806.png" type="image/png">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    :root {
+        --primary: #00d4ff;       /* Neon Blue */
+        --bg-dark: #050b14;       /* Deep Black */
+        --card-bg: #0f172a;       /* Navy Card */
+        --text-white: #ffffff;
+        --text-gray: #94a3b8;
+        --glass: rgba(15, 23, 42, 0.8);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+        font-family: 'Outfit', sans-serif;
+        background-color: var(--bg-dark);
+        color: var(--text-white);
+        overflow-x: hidden;
+        padding-bottom: 30px;
+    }
+
+    /* --- Background Grid Animation --- */
+    body::before {
+        content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-image: 
+            linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        z-index: -1;
+        animation: moveGrid 20s linear infinite;
+    }
+    @keyframes moveGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+
+    /* --- Navbar --- */
+    nav {
+        background: rgba(5, 11, 20, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px 20px;
+        position: sticky; top: 0; z-index: 1000;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .brand img { 
+        width: 42px; height: 42px; border-radius: 50%; 
+        border: 2px solid var(--primary); 
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    }
+    .brand span { 
+        font-family: 'Space Grotesk', sans-serif; 
+        font-weight: 700; font-size: 1.2rem; color: white;
+    }
+    .menu-btn { font-size: 1.5rem; color: var(--primary); cursor: pointer; }
+
+    /* --- Sidebar Menu --- */
+    .sidebar {
+        position: fixed; top: 0; right: -280px; width: 280px; height: 100%;
+        background: #0b1120; border-left: 1px solid var(--primary);
+        box-shadow: -5px 0 30px rgba(0,0,0,0.8);
+        transition: 0.3s ease; z-index: 2000; padding-top: 60px;
+    }
+    .sidebar.active { right: 0; }
+    
+    .sidebar a {
+        display: flex; align-items: center; gap: 15px;
+        padding: 15px 25px; color: #cbd5e1; text-decoration: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 500;
+        font-size: 0.95rem; transition: 0.2s;
+    }
+    .sidebar a i { width: 20px; color: var(--primary); text-align: center; }
+    .sidebar a:hover { background: rgba(0, 212, 255, 0.1); color: white; border-left: 4px solid var(--primary); }
+    .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: white; }
+    
+    .overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); z-index: 1500; display: none;
+        backdrop-filter: blur(3px);
+    }
+
+    /* --- Page Structure --- */
+    .page { display: none; padding: 20px; max-width: 800px; margin: auto; animation: fadeUp 0.5s ease; }
+    .page.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    h1 { color: white; margin-bottom: 20px; font-family: 'Space Grotesk'; font-size: 2rem; }
+    h1 span { color: var(--primary); }
+
+    /* --- Cards --- */
+    .card {
+        background: var(--card-bg); padding: 25px; border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative;
+    }
+
+    /* --- Forms --- */
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 8px; }
+    .form-control {
+        width: 100%; padding: 14px; background: #020617; border: 1px solid #334155;
+        border-radius: 10px; color: white; font-size: 1rem; outline: none; transition: 0.3s;
+    }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 212, 255, 0.2); }
+
+    .btn {
+        background: var(--primary); color: #000; padding: 14px; width: 100%;
+        border-radius: 50px; border: none; font-weight: 700; font-size: 1rem;
+        cursor: pointer; box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        display: flex; justify-content: center; align-items: center; gap: 10px;
+        text-decoration: none; transition: 0.3s;
+    }
+    .btn:active { transform: scale(0.98); }
+
+    /* --- Modal (Popup) --- */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85); z-index: 5000; display: none;
+        justify-content: center; align-items: center; backdrop-filter: blur(8px);
+    }
+    .modal-box {
+        background: #1e293b; padding: 30px 20px; border-radius: 20px;
+        border: 1px solid var(--primary); text-align: center; width: 85%; max-width: 350px;
+        animation: popIn 0.3s ease;
+    }
+    @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+    .app-btn {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px;
+        font-weight: bold; border: none; cursor: pointer; font-size: 1rem; color: white;
+    }
+    .wa-bg { background: linear-gradient(45deg, #25D366, #128C7E); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); }
+    .gmail-bg { background: linear-gradient(45deg, #EA4335, #C5221F); box-shadow: 0 5px 15px rgba(234, 67, 53, 0.3); }
+
+    /* --- Loader --- */
+    #loader {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column;
+        justify-content: center; align-items: center; transition: opacity 0.5s;
+    }
+    .spinner {
+        width: 50px; height: 50px; border: 4px solid #333;
+        border-top: 4px solid var(--primary); border-radius: 50%;
+        animation: spin 1s linear infinite; margin-bottom: 20px;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+</style>
+</head>
+<body onload="hideLoader()">
+
+<!-- Loader -->
+<div id="loader">
+    <div class="spinner"></div>
+    <div style="font-family:'Space Grotesk'; letter-spacing:2px; font-weight:bold;">LEADMATRIX</div>
+</div>
+
+<!-- Navbar -->
+<nav>
+    <div class="brand" onclick="navigate('home')">
+        <img src="https://i.ibb.co/5WnLCMDC/Picsart-26-02-18-13-56-38-806.png" alt="Logo">
+        <span>LeadMatrix</span>
+    </div>
+    <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+</nav>
+
+<!-- Sidebar Overlay -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<!-- Sidebar Menu -->
+<div class="sidebar" id="sidebar">
+    <div class="close-btn" onclick="toggleMenu()">&times;</div>
+    <div style="padding: 0 25px; margin-bottom: 20px; opacity: 0.5; font-size: 0.8rem;">MENU</div>
+    
+    <a href="#" onclick="navigate('home')"><i class="fas fa-home"></i> Home</a>
+    <a href="#" onclick="navigate('about')"><i class="fas fa-building"></i> About Us</a>
+    <a href="#" onclick="navigate('services')"><i class="fas fa-briefcase"></i> Services</a>
+    <a href="#" onclick="navigate('career')"><i class="fas fa-user-tie"></i> Careers</a>
+    <a href="#" onclick="navigate('success')"><i class="fas fa-star"></i> Success Stories</a>
+    <a href="#" onclick="navigate('faq')"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="#" onclick="navigate('terms')"><i class="fas fa-file-contract"></i> T&C</a>
+    <a href="#" onclick="navigate('privacy')"><i class="fas fa-user-shield"></i> Privacy Policy</a>
+    <a href="#" onclick="navigate('contact')"><i class="fas fa-headset"></i> Contact Us</a>
+    
+    <div style="padding: 20px;">
+        <button onclick="navigate('apply')" class="btn" style="border-radius: 10px;">Apply Now</button>
+    </div>
+</div>
+
+<!-- ================================= PAGES ================================= -->
+
+<!-- 1. HOME PAGE -->
+<div id="home" class="page active">
+    <div class="card" style="text-align: center; padding: 40px 20px; border: 1px solid var(--primary);">
+        <div style="display:inline-block; padding:5px 15px; background:rgba(0,212,255,0.1); color:var(--primary); border-radius:20px; font-size:0.8rem; margin-bottom:15px; font-weight:bold;">🚀 100% Genuine Work</div>
+        <h1 style="font-size: 2.5rem; line-height: 1.1;">Future of Work <br><span>is Here.</span></h1>
+        <p style="color: var(--text-gray); margin-bottom: 25px;">Join West Bengal's verified recruitment platform. No fees, legitimate income.</p>
+        
+        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;">
+            <span style="background:#1e293b; padding:8px 15px; border-radius:8px; font-size:0.8rem;">✅ No Fees</span>
+            <span style="background:#1e293b; padding:8px 15px; border-radius:8px; font-size:0.8rem;">✅ Weekly Pay</span>
+        </div>
+
+        <button class="btn" onclick="navigate('apply')">Start Application <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <div class="card">
+        <h3>📢 Latest Updates</h3>
+        <p style="color:#22c55e; margin-top:10px;"><i class="fas fa-check-circle"></i> New HR batches started.</p>
+        <p style="color:#22c55e; margin-top:5px;"><i class="fas fa-check-circle"></i> Instant payout available.</p>
+    </div>
+</div>
+
+<!-- 2. ABOUT US -->
+<div id="about" class="page">
+    <h1>About <span>Us</span></h1>
+    <div class="card">
+        <p>LeadMatrix India is a dedicated recruitment solution managing operations for multiple clients across West Bengal and India.</p>
+        <br>
+        <p><strong>Mission:</strong> To reduce unemployment by providing accessible digital work.</p>
+    </div>
+</div>
+
+<!-- 3. SERVICES -->
+<div id="services" class="page">
+    <h1>Our <span>Services</span></h1>
+    <div class="card">
+        <h3><i class="fas fa-laptop-code" style="color:var(--primary)"></i> Remote Management</h3>
+        <p style="color:#94a3b8; margin-top:5px;">We manage remote teams effectively.</p>
+    </div>
+    <div class="card">
+        <h3><i class="fas fa-graduation-cap" style="color:var(--primary)"></i> Free Training</h3>
+        <p style="color:#94a3b8; margin-top:5px;">Skill development for new joiners.</p>
+    </div>
+</div>
+
+<!-- 4. CAREERS -->
+<div id="career" class="page">
+    <h1>Open <span>Positions</span></h1>
+    <div class="card" style="border-left: 4px solid var(--primary);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>HR Monitor</h2>
+            <span style="background: #22c55e; color: black; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight:bold;">HIRING</span>
+        </div>
+        <p style="color: #94a3b8; margin: 10px 0;">Manage HR tasks and monitor data.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px; font-size:0.9rem;">
+            <div><i class="fas fa-check" style="color:var(--primary)"></i> Age: 18+</div>
+            <div><i class="fas fa-check" style="color:var(--primary)"></i> Qual: 10th+</div>
+        </div>
+        <button class="btn" onclick="navigate('apply')">Apply Now</button>
+    </div>
+</div>
+
+<!-- 5. SUCCESS STORIES -->
+<div id="success" class="page">
+    <h1>Success <span>Stories</span></h1>
+    <div class="card">
+        <h4>Rahul Roy <span style="font-size:0.8rem; color:var(--primary)">(Student)</span></h4>
+        <p style="font-style: italic; color: #cbd5e1; margin-top:5px;">"Best platform for students. I earn my pocket money easily."</p>
+    </div>
+    <div class="card">
+        <h4>Sneha Das <span style="font-size:0.8rem; color:var(--primary)">(Homemaker)</span></h4>
+        <p style="font-style: italic; color: #cbd5e1; margin-top:5px;">"Safe environment for women. Good income."</p>
+    </div>
+</div>
+
+<!-- 6. FAQ -->
+<div id="faq" class="page">
+    <h1>F.A.Q</h1>
+    <div class="card">
+        <h3>Q. Is there any joining fee?</h3>
+        <p style="color: var(--primary);">Ans: No. It is 100% Free.</p>
+    </div>
+    <div class="card">
+        <h3>Q. Can I do it from mobile?</h3>
+        <p style="color: var(--primary);">Ans: Yes, smartphone is enough.</p>
+    </div>
+</div>
+
+<!-- 7. TERMS -->
+<div id="terms" class="page">
+    <h1>Terms & Conditions</h1>
+    <div class="card">
+        <p>1. User must be 18+ years old.</p>
+        <p>2. Fraudulent activity leads to ban.</p>
+        <p>3. Payouts are performance based.</p>
+    </div>
+</div>
+
+<!-- 8. PRIVACY -->
+<div id="privacy" class="page">
+    <h1>Privacy Policy</h1>
+    <div class="card">
+        <p>We respect your privacy. Your data (Name, Number) is used strictly for recruitment. We do not sell data.</p>
+    </div>
+</div>
+
+<!-- 9. CONTACT FORM (Smart Form) -->
+<div id="contact" class="page">
+    <h1>Contact <span>Us</span></h1>
+    <div class="card">
+        <p style="margin-bottom:20px; color:#94a3b8;">Fill the form below to chat with HR.</p>
+        <form onsubmit="handleFormSubmit(event, 'Enquiry')">
+            <div class="form-group"><input type="text" class="form-control" id="c_name" placeholder="Full Name" required></div>
+            <div class="form-group"><input type="tel" class="form-control" id="c_phone" placeholder="WhatsApp Number" required></div>
+            <div class="form-group"><input type="email" class="form-control" id="c_email" placeholder="Email Address" required></div>
+            <div class="form-group">
+                <select class="form-control" id="c_gender">
+                    <option>Male</option><option>Female</option><option>Other</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Send Message <i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+</div>
+
+<!-- 10. APPLY FORM (Smart Form) -->
+<div id="apply" class="page">
+    <h1>Apply <span>Now</span></h1>
+    <div class="card">
+        <p style="margin-bottom:20px; color:#94a3b8;">Official Job Application Form.</p>
+        <form onsubmit="handleFormSubmit(event, 'Job Application')">
+            <div class="form-group"><input type="text" class="form-control" id="a_name" placeholder="Full Name" required></div>
+            <div class="form-group"><input type="tel" class="form-control" id="a_phone" placeholder="WhatsApp Number" required></div>
+            <div class="form-group"><input type="email" class="form-control" id="a_email" placeholder="Email Address" required></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="form-group"><input type="number" class="form-control" id="a_age" placeholder="Age" required></div>
+                <div class="form-group">
+                    <select class="form-control" id="a_gender">
+                        <option>Male</option><option>Female</option><option>Other</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn">Proceed <i class="fas fa-chevron-right"></i></button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL POPUP -->
+<div id="modal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 style="color: white; font-family: 'Space Grotesk'; margin-bottom: 10px;">Select App</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">Send your details via:</p>
+        
+        <button onclick="sendVia('whatsapp')" class="app-btn wa-bg">
+            <i class="fab fa-whatsapp" style="font-size: 1.4rem;"></i> WhatsApp
+        </button>
+        
+        <button onclick="sendVia('gmail')" class="app-btn gmail-bg">
+            <i class="fas fa-envelope" style="font-size: 1.4rem;"></i> Gmail
+        </button>
+
+        <button onclick="closeModal()" style="background: none; border: none; color: #64748b; margin-top: 15px; cursor: pointer;">Cancel</button>
+    </div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+    // Global Variables to store form data
+    let formData = {};
+
+    // 1. Initial Loader
+    function hideLoader() {
+        setTimeout(() => {
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 500);
+        }, 1500);
+    }
+
+    // 2. Navigation
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
+
+    function navigate(pageId) {
+        document.getElementById('sidebar').classList.remove('active');
+        document.getElementById('overlay').classList.remove('active');
+        window.scrollTo(0,0);
+        
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    // 3. Form Handling
+    function handleFormSubmit(e, type) {
+        e.preventDefault();
+        
+        // Check which form is being submitted
+        if(type === 'Job Application') {
+            formData = {
+                type: type,
+                name: document.getElementById('a_name').value,
+                phone: document.getElementById('a_phone').value,
+                email: document.getElementById('a_email').value,
+                age: document.getElementById('a_age').value,
+                gender: document.getElementById('a_gender').value
+            };
+        } else {
+            formData = {
+                type: type,
+                name: document.getElementById('c_name').value,
+                phone: document.getElementById('c_phone').value,
+                email: document.getElementById('c_email').value,
+                age: "N/A", // Contact form might not have age
+                gender: document.getElementById('c_gender').value
+            };
+        }
+
+        // Open Modal
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    // 4. Send Message Logic
+    function sendVia(app) {
+        let msg = "";
+        
+        if(app === 'whatsapp') {
+            msg = `🌐 *OFFICIAL WEBSITE FORM* %0A`;
+            msg += `--------------------------------%0A`;
+            msg += `📝 *Purpose:* ${formData.type}%0A`;
+            msg += `👤 *Name:* ${formData.name}%0A`;
+            msg += `📞 *Phone:* ${formData.phone}%0A`;
+            msg += `📧 *Email:* ${formData.email}%0A`;
+            if(formData.age !== "N/A") msg += `🎂 *Age:* ${formData.age}%0A`;
+            msg += `⚧ *Gender:* ${formData.gender}%0A`;
+            msg += `--------------------------------%0A`;
+            msg += `✅ *Source:* Verified LeadMatrix Portal`;
+
+            window.open(`https://wa.me/917003992156?text=${msg}`, '_blank');
+        } 
+        else if(app === 'gmail') {
+            let body = `🌐 OFFICIAL WEBSITE FORM %0D%0A`;
+            body += `--------------------------------%0D%0A`;
+            body += `Purpose: ${formData.type}%0D%0A`;
+            body += `Name: ${formData.name}%0D%0A`;
+            body += `Phone: ${formData.phone}%0D%0A`;
+            body += `Email: ${formData.email}%0D%0A`;
+            if(formData.age !== "N/A") body += `Age: ${formData.age}%0D%0A`;
+            body += `Gender: ${formData.gender}%0D%0A`;
+            body += `--------------------------------%0D%0A`;
+            body += `Source: Verified LeadMatrix Portal`;
+
+            window.open(`mailto:ritwikgiri1997@gmail.com?subject=Website Enquiry: ${formData.name}&body=${body}`, '_blank');
+        }
+        
+        closeModal();
+    }
+</script>
+
+</body>
+</html>
